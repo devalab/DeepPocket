@@ -14,4 +14,4 @@ def clean_pdb(input_file,output_file):
     io.save(output_file, NonHetSelect())
     
 if __name__ == '__main__':
-    clean_pdb((sys.argv[1],sys.argv[2])
+    clean_pdb(sys.argv[1],sys.argv[2])

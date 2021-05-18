@@ -1,3 +1,7 @@
+'''
+Takes a PDB file and removes hetero atoms from its structure.
+First argument is path to original file, second argument is path to generated file
+'''
 from Bio.PDB import PDBParser, PDBIO, Select
 import Bio
 import os

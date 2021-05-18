@@ -23,7 +23,6 @@ def parse_args(argv=None):
                         help="test types file")
     parser.add_argument('-d', '--data_dir', type=str, required=False,
                         help="Root directory of data", default="")
-    parser.add_argument('-o', '--out', type=str, help="Prefix for output files", required=True)
     parser.add_argument('--checkpoint', type=str, required=False, help="file to continue training from")
     args = parser.parse_args(argv)
 

@@ -21,8 +21,6 @@ def parse_args(argv=None):
                         help="Model template python file")
     parser.add_argument('--test_types', type=str, required=True,
                         help="test types file")
-    parser.add_argument('-d', '--data_dir', type=str, required=False,
-                        help="Root directory of data", default="")
     parser.add_argument('--checkpoint', type=str, required=False, help="file to continue training from")
     args = parser.parse_args(argv)
 
@@ -42,10 +40,10 @@ def initialize_model(model, args):
 def get_model_gmaker_eproviders(args,batch_size):
     # test example provider
     eptest_large = molgrid.ExampleProvider(shuffle=False, stratify_receptor=False, labelpos=0,balanced=False,
-                                     data_root=args.data_dir,iteration_scheme=molgrid.IterationScheme.LargeEpoch,default_batch_size=batch_size)
+                                     iteration_scheme=molgrid.IterationScheme.LargeEpoch,default_batch_size=batch_size)
     eptest_large.populate(args.test_types)
     eptest_small = molgrid.ExampleProvider(shuffle=True, stratify_receptor=True, labelpos=0, balanced=True,
-                                           data_root=args.data_dir, iteration_scheme=molgrid.IterationScheme.SmallEpoch,
+                                           iteration_scheme=molgrid.IterationScheme.SmallEpoch,
                                            default_batch_size=batch_size)
     eptest_small.populate(args.test_types)
     # gridmaker with defaults
@@ -64,6 +62,8 @@ def test_model(model, ep, gmaker,  batch_size):
         all_probs=[]
         # testing setup
         # testing loop
+        dims = gmaker.grid_dimensions(ep.num_types())
+        tensor_shape = (batch_size,) + dims
         criterion = nn.CrossEntropyLoss()
         input_tensor = torch.zeros(tensor_shape, dtype=torch.float32, device='cuda', requires_grad=True)
         float_labels = torch.zeros((batch_size,4), dtype=torch.float32, device='cuda')
@@ -95,8 +95,6 @@ if __name__ == '__main__':
     batch_size = len(types_lines)
     model, gmaker,  eptest_large,eptest_small = get_model_gmaker_eproviders(args,batch_size)
     initialize_model(model, args)
-    dims = gmaker.grid_dimensions(eptest_small.num_types())
-    tensor_shape = (batch_size,) + dims
     all_labels, all_probs = test_model(model, eptest_large, gmaker,  batch_size)
     zipped_lists = zip(all_probs, types_lines)
     sorted_zipped_lists = sorted(zipped_lists,reverse=True)

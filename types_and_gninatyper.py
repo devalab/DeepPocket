@@ -8,12 +8,14 @@ import struct
 import numpy as np
 import os
 import sys
+from model import Model
+
 def gninatype(file):
-    f=open('nowat.types','w')
+    f=open(file.replace('.pdb','.types'),'w')
     f.write(file)
     f.close()
     dataloader=molgrid.ExampleProvider(shuffle=False,default_batch_size=1)
-    train_types='nowat.types'
+    train_types=file.replace('.pdb','.types')
     dataloader.populate(train_types)
     example=dataloader.next()
     coords=example.coord_sets[0].coords.tonumpy()
@@ -23,7 +25,7 @@ def gninatype(file):
     for i in range(coords.shape[0]):
         fout.write(struct.pack('fffi',coords[i][0],coords[i][1],coords[i][2],types[i]))
     fout.close()
-    os.remove('nowat.types')
+    os.remove(train_types)
     return file.replace('.pdb','.gninatypes')
 
 def create_types(file,protein):
@@ -31,8 +33,9 @@ def create_types(file,protein):
     fin =open(file,'r')
     for line in fin:
         fout.write(' '.join(line.split()) + ' ' + protein +'\n')
+    return file.replace('.txt','.types')
 
 
 if __name__ == '__main__':
     protein=gninatype(sys.argv[1])
-    create_types(sys.argv[2],protein)
+    types=create_types(sys.argv[2],protein)

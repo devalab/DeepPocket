@@ -77,7 +77,7 @@ def parse_args(argv=None):
 
     return (args, line)
 
-def test(model, test_loader, gmaker_img,device, args):
+def test(model, test_loader, gmaker_img,device,dx_name, args):
     if args.rank==0:
         return
     count=0
@@ -98,7 +98,7 @@ def test(model, test_loader, gmaker_img,device, args):
         masks_pred=preprocess_output(masks_pred[0], args.threshold)
         masks_pred=masks_pred.cpu()
         masks_pred=molgrid.Grid3f(masks_pred)
-        molgrid.write_dx(args.dx_name+'_'+str(count)+'.dx',masks_pred,center,0.5,1.0)
+        molgrid.write_dx(dx_name+'_'+str(count)+'.dx',masks_pred,center,0.5,1.0)
         if count>=args.rank:
             break
 
@@ -112,4 +112,5 @@ if __name__ == "__main__":
     model.cuda()
     model = nn.DataParallel(model)
     model.load_state_dict(checkpoint['model_state_dict'])
-    test(model, eptest, gmaker_img,device, args)
+    dx_name=args.dx_name
+    test(model, eptest, gmaker_img,device,dx_name, args)

@@ -1,2 +1,9 @@
 # DeepPocket
-Ligand Binding Site detection using Deep Learning
+
+DeepPocket is a 3D convolutional Neural Network framework for ligand binding site detection and segmentation from protein structures.
+
+## Requirements
+
+Pytorch, libmolgrid, Biopython and other frequently used python packages
+
+

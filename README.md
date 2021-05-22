@@ -33,7 +33,7 @@ Example usage of predict.py:
 
 Description of each argument given in script.
 
-## Training classifier
+## Training Classifier
 
 We use [wandb](https://wandb.ai/site) to track training performance. It's free and easy to use. If you want to avoid using wandb, simply comment out all lines that contain "wandb" in the training script.
 

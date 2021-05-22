@@ -4,6 +4,6 @@ DeepPocket is a 3D convolutional Neural Network framework for ligand binding sit
 
 ## Requirements
 
-Pytorch, libmolgrid, Biopython and other frequently used python packages
+[Pytorch](https://pytorch.org/), [libmolgrid](https://github.com/gnina/libmolgrid), [Biopython](https://biopython.org/) and other frequently used python packages
 
 

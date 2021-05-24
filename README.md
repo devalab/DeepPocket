@@ -2,7 +2,7 @@
 
 DeepPocket is a 3D convolutional Neural Network framework for ligand binding site detection and segmentation from protein structures. This is the official open source repository for the following paper:
 
-Aggarwal, Rishal; Gupta, Akash; Chelur, Vineeth; Jawahar, C. V.; Priyakumar, U. Deva (2021): DeepPocket: Ligand Binding Site Detection and Segmentation using 3D Convolutional Neural Networks. ChemRxiv. Preprint. (Link)[https://doi.org/10.26434/chemrxiv.14611146.v1] 
+Aggarwal, Rishal; Gupta, Akash; Chelur, Vineeth; Jawahar, C. V.; Priyakumar, U. Deva (2021): DeepPocket: Ligand Binding Site Detection and Segmentation using 3D Convolutional Neural Networks. ChemRxiv. Preprint. [Link](https://doi.org/10.26434/chemrxiv.14611146.v1) 
 
 ## Requirements
 

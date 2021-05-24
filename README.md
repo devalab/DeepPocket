@@ -56,3 +56,22 @@ Example usage of train_segmentation.py:
 Description of each argument in script
 
 ## Preparing Data
+
+I have written down steps below that pertain to preparing training data for a dataset like PDBbind, but could easily be adopted for other datasets by making approprate changes of file paths and file names in the scripts.
+
+Steps for preparing training data:
+
+1) remove hetero atoms (clean_pdb.py)
+2) run fpocket through structures (fpocket -f *_protein.pdb)
+3) get candidate pocket centers for all structures (get_centers.py)
+4) create .gninatypes files for all structure (gninatype() in types_and_gninatyper.py)
+5) make train and test types (make_types.py)
+6) create molcache file for training (create_molcache2.py)
+
+Example usage of create_molcache2:
+
+	python create_molcache2.py -c 4 --recmolcache scPDB_new.molcache2 -d data/scPDB/  scPDB_train0.types scPDB_test0.types
+
+## Citation
+
+If you find this useful please cite the paper mentioned above.

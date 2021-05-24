@@ -35,7 +35,10 @@ Example usage of predict.py:
     python predict.py -p protein.pdb -c first_model_fold1_best_test_auc_85001.pth.tar -s seg0_best_test_IOU_91.pth.tar -r 3
 
 Description of each argument given in script.
-If the name of the input file is protein.pdb, then fpocket creates a protein_out/pockets directory. The CNN ranked pockets will be given in the bary_centers_ranked.types file in that directory. If you asked for segmented pockets ("-r") the script will output ".dx" files that can be visualised in pymol. 
+
+If the name of the input file is protein.pdb, then fpocket creates a protein_out/pockets directory. The CNN ranked pockets will be given in the bary_centers_ranked.types file in that directory. 
+
+If you asked for segmented pockets ("-r") the script will output ".dx" files that can be visualised in pymol. 
 
 ## Training Classifier
 

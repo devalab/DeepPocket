@@ -40,9 +40,16 @@ We use [wandb](https://wandb.ai/site) to track training performance. It's free a
 
 Example usage of train.py:
 
-    python train.py -m model.py --train_types scPDB_train0.types --test_types scPDB_test0.types -i 200000 --train_recmolcache scPDB_new.molcache2 --test_recmolcache scPDB_new.molcache2 -r val0 -o $PBSP_DIR/model_saves/ --base_lr 0.001 --solver Adam 
+    python train.py -m model.py --train_types scPDB_train0.types --test_types scPDB_test0.types -i 200000 --train_recmolcache scPDB_new.molcache2 --test_recmolcache scPDB_new.molcache2 -r val0 -o /model_saves/val9 --base_lr 0.001 --solver Adam 
 
 Description of each argument given in script.
 
 ## Training segmentation
 
+Example usage of train_segmentation.py:
+
+    python train_segmentation.py --train_types seg_scPDB_train9.types --test_types seg_scPDB_test9.types -d data/ --train_recmolcache scPDB_new.molcache2 --test_recmolcache scPDB_new.molcache2 -b 8 -o model_saves/seg9 -e 200 -r seg9
+    
+Description of each argument in script
+
+## Preparing Data

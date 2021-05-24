@@ -6,7 +6,7 @@ Aggarwal, Rishal; Gupta, Akash; Chelur, Vineeth; Jawahar, C. V.; Priyakumar, U. 
 
 ## Requirements
 
-[Fpocket](https://github.com/Discngine/fpocket) ,[Pytorch](https://pytorch.org/), [libmolgrid](https://github.com/gnina/libmolgrid), [Biopython](https://biopython.org/) and other frequently used python packages
+[Fpocket](https://github.com/Discngine/fpocket), [Pytorch](https://pytorch.org/), [libmolgrid](https://github.com/gnina/libmolgrid), [Biopython](https://biopython.org/) and other frequently used python packages
 
 ## Dataset Preprocessing
 

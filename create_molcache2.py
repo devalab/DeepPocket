@@ -1,8 +1,9 @@
 '''Takes a bunch of types training files. First argument is what index the receptor starts on
-(ligands are assumed to be right after).  Reads in the gninatypes files specified in these types
-files and writes out two monolithic receptor and ligand cache files in version 2 format.
+Reads in the gninatypes files specified in these types files and writes out a monolithic receptor cache file.
 Version 2 is optimized for memory mapped storage of caches.  keys (file names) are stored
 first followed by dense storage of values (coordinates and types).
+
+Thanks to David Koes for original script (https://github.com/gnina/scripts/blob/master/create_caches2.py)
 '''
 
 import os, sys

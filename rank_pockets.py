@@ -84,6 +84,8 @@ def test_model(model, ep, gmaker,  batch_size):
         # mean loss for testing session
         all_labels=torch.flatten(torch.stack(all_labels)).cpu().numpy()
         all_probs=torch.flatten(torch.stack(all_probs),start_dim=0,end_dim=1).cpu().numpy()
+        # saving cuda memory for segmentation
+        del input_tensor
         return all_labels, all_probs[:,1]
 
 if __name__ == '__main__':

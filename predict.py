@@ -28,7 +28,7 @@ from model import Model
 from rank_pockets import test_model
 from unet import Unet
 from segment_pockets import test
-
+import gc
 def parse_args(argv=None):
     '''Return argument namespace and commandline'''
     parser = argparse.ArgumentParser(description='predict ligand binding site from .pdb file')
@@ -85,15 +85,23 @@ if __name__ == '__main__':
     class_checkpoint=torch.load(args.class_checkpoint)
     types_lines=open(class_types,'r').readlines()
     batch_size = len(types_lines)
+    #avoid cuda out of memory
+    if batch_size>50:
+        batch_size=50
     class_model, class_gmaker, class_eptest=get_model_gmaker_eprovider(class_types,batch_size,class_model,class_checkpoint)
+    #divisible by 50 if types_lines > 50
     class_labels, class_probs = test_model(class_model, class_eptest, class_gmaker,  batch_size)
-    zipped_lists = zip(class_probs, types_lines)
+    zipped_lists = zip(class_probs[:len(types_lines)], types_lines)
     sorted_zipped_lists = sorted(zipped_lists,reverse=True)
     ranked_types = [element for _, element in sorted_zipped_lists]
     seg_types= class_types.replace('.types','_ranked.types')
     fout=open(seg_types,'w')
     fout.write(''.join(ranked_types))
     fout.close()
+    del class_model
+    del class_checkpoint
+    gc.collect()
+    torch.cuda.empty_cache()
     #segmentation
     if args.rank!=0:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

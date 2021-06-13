@@ -22,6 +22,7 @@ from skimage.morphology import cube
 torch.backends.cudnn.benchmark = True
 
 def get_mask(coordinateset,center,gmaker):
+    # Create ground truth tensor
     c2grid = molgrid.Coords2Grid(gmaker, center=center)
     origtypes = torch.ones(coordinateset.coords.tonumpy().shape[0], 1)
     radii = torch.ones((coordinateset.coords.tonumpy().shape[0]))
@@ -106,6 +107,7 @@ def get_model_gmaker_eproviders(args):
     # gridmaker with defaults
     gmaker_img = molgrid.GridMaker(dimension=32)
     dims = gmaker_img.grid_dimensions(eptrain.num_types())
+    #grid maker for ground truth tensor
     gmaker_mask = molgrid.GridMaker(dimension=32,binary=True,gaussian_radius_multiple=-1,resolution=0.5)
 
     return  gmaker_img, gmaker_mask,eptrain, eptest
@@ -183,6 +185,7 @@ def train(model, train_loader, test_loader,gmaker_img,gmaker_mask, args, device)
     dims = gmaker_img.grid_dimensions(eptrain.num_types())
     tensor_shape = (args.batch_size,) + dims
     mask_shape=(args.batch_size,1) + dims[1:]
+    #create tensor for input, ground truth/mask, centers and labels
     input_tensor = torch.zeros(tensor_shape, dtype=torch.float32, device=device, requires_grad=True)
     mask_tensor = torch.empty(mask_shape, dtype=torch.float32, device=device, requires_grad=True)
     float_labels = torch.zeros((args.batch_size, 4), dtype=torch.float32, device=device)
@@ -192,16 +195,22 @@ def train(model, train_loader, test_loader,gmaker_img,gmaker_mask, args, device)
         #running_acc = 0.0
         #running_loss = 0.0
         for batch in train_loader:
+            # extract labels and centers of batch datapoints
             batch.extract_labels(float_labels)
             centers = float_labels[:, 1:]
             for b in range(args.batch_size):
                 center = molgrid.float3(float(centers[b][0]), float(centers[b][1]), float(centers[b][2]))
+                #intialise transformer for rotaional augmentation
                 transformer = molgrid.Transform(center, 0, True)
+                # random rotation on input protein
                 transformer.forward(batch[b], batch[b])
+                # Update input tensor with b'th datapoint of the batch
                 gmaker_img.forward(center, batch[b].coord_sets[0], input_tensor[b])
                 with torch.no_grad():
+                    # Update mask tensor with b'th datapoint ground truth of the batch
                     mask_tensor[b]=get_mask(batch[b].coord_sets[-1],center,gmaker_mask).to(device)
             optimizer.zero_grad()
+            # Take only the first 14 channels as that is for proteins, other 14 are ligands and will remain 0.
             masks_pred = model(input_tensor[:,:14])
             loss = criterion(masks_pred, mask_tensor)
             loss.backward()
@@ -304,20 +313,25 @@ def test(model, test_loader, gmaker_img,gmaker_mask, args, criterion,device):
     dims = gmaker_img.grid_dimensions(eptrain.num_types())
     tensor_shape = (args.batch_size,) + dims
     mask_shape = (args.batch_size, 1) + dims[1:]
+    #create tensor for input, ground truth/mask, centers and labels
     input_tensor = torch.zeros(tensor_shape, dtype=torch.float32, device=device, requires_grad=True)
     mask_tensor = torch.empty(mask_shape, dtype=torch.float32, device=device, requires_grad=True)
     float_labels = torch.zeros((args.batch_size, 4), dtype=torch.float32, device=device)
 
     for batch in test_loader:
+        # extract labels and centers of batch datapoints
         batch.extract_labels(float_labels)
         centers = float_labels[:, 1:]
         for b in range(args.batch_size):
             center = molgrid.float3(float(centers[b][0]), float(centers[b][1]), float(centers[b][2]))
             transformer = molgrid.Transform(center, 0, True)
             transformer.forward(batch[b], batch[b])
+            # Update input tensor with b'th datapoint of the batch
             gmaker_img.forward(center, batch[b].coord_sets[0], input_tensor[b])
             with torch.no_grad():
+                # Update mask tensor with b'th datapoint ground truth of the batch
                 mask_tensor[b] = get_mask(batch[b].coord_sets[-1], center, gmaker_mask).to(device)
+        # Take only the first 14 channels as that is for proteins, other 14 are ligands and will remain 0.
         masks_pred = model(input_tensor[:,:14])
         loss = criterion(masks_pred, mask_tensor)
         _, predictions = torch.max(masks_pred, 1)

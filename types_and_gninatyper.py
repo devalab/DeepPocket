@@ -11,6 +11,7 @@ import sys
 from model import Model
 
 def gninatype(file):
+    # creates gninatype file for model input
     f=open(file.replace('.pdb','.types'),'w')
     f.write(file)
     f.close()
@@ -29,6 +30,7 @@ def gninatype(file):
     return file.replace('.pdb','.gninatypes')
 
 def create_types(file,protein):
+    # create types file for model predictions
     fout=open(file.replace('.txt','.types'),'w')
     fin =open(file,'r')
     for line in fin:

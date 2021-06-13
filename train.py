@@ -116,17 +116,21 @@ def train_and_test(args, model, eptrain, eptest_large,eptest_small, gmaker):
         # testing setup
         # testing loop
         criterion = nn.CrossEntropyLoss()
+        # Create tensors for input, center and labels
         input_tensor = torch.zeros(tensor_shape, dtype=torch.float32, device='cuda', requires_grad=True)
         float_labels = torch.zeros((batch_size,4), dtype=torch.float32, device='cuda')
         count=0
         for batch in ep:
             count+=1
+            # extract labels and centers of batch datapoints
             batch.extract_labels(float_labels)
             centers = float_labels[:,1:]
             labels = float_labels[:,0].long().to('cuda')
             for b in range(batch_size):
                 center = molgrid.float3(float(centers[b][0]),float(centers[b][1]),float(centers[b][2]))
+                # Update input tensor with b'th datapoint of the batch
                 gmaker.forward(center,batch[b].coord_sets[0],input_tensor[b])
+            # Take only the first 14 channels as that is for proteins, other 14 are for ligand and will remain 0.
             output = model(input_tensor[:,:14])
             #labels_oh = nn.functional.one_hot(labels)
             #labels_oh = labels_oh
@@ -195,21 +199,28 @@ def train_and_test(args, model, eptrain, eptest_large,eptest_small, gmaker):
     tensor_shape = (batch_size,) + dims
 
     model.cuda()
+    #create tensor for input, centers and labels
     input_tensor = torch.zeros(tensor_shape, dtype=torch.float32, device='cuda', requires_grad=True)
     float_labels = torch.zeros((batch_size,4), dtype=torch.float32, device='cuda')
     criterion = torch.nn.CrossEntropyLoss()
     for i in range(initial, iterations):
+        # Get the next batch for training
         batch = eptrain.next_batch(batch_size)
+        # extract labels and centers of batch datapoints
         batch.extract_labels(float_labels)
         centers = float_labels[:, 1:]
         labels = float_labels[:, 0].long().to('cuda')
         for b in range(batch_size):
             center = molgrid.float3(float(centers[b][0]), float(centers[b][1]), float(centers[b][2]))
+            #intialise transformer for rotaional augmentation
             transformer = molgrid.Transform(center, 0, True)
             #center=transformer.get_quaternion().rotate(center.x,center.y,center.z)
+            # random rotation on input protein
             transformer.forward(batch[b],batch[b])
+            # Update input tensor with b'th datapoint of the batch
             gmaker.forward(center, batch[b].coord_sets[0], input_tensor[b])
         optimizer.zero_grad()
+        # Take only the first 14 channels as that is for proteins, other 14 are ligands and will remain 0.
         output = model(input_tensor[:,:14])
         #labels_oh = nn.functional.one_hot(labels)
         #labels_oh = labels_oh

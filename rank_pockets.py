@@ -65,26 +65,30 @@ def test_model(model, ep, gmaker,  batch_size):
         dims = gmaker.grid_dimensions(ep.num_types())
         tensor_shape = (batch_size,) + dims
         criterion = nn.CrossEntropyLoss()
+        #create tensor for input, center and index
         input_tensor = torch.zeros(tensor_shape, dtype=torch.float32, device='cuda', requires_grad=True)
         float_labels = torch.zeros((batch_size,4), dtype=torch.float32, device='cuda')
         count=0
         for batch in ep:
             count+=1
+            # update float_labels with center and index values
             batch.extract_labels(float_labels)
             centers = float_labels[:,1:]
             labels = float_labels[:,0].long().to('cuda')
             for b in range(batch_size):
                 center = molgrid.float3(float(centers[b][0]),float(centers[b][1]),float(centers[b][2]))
+                # Update input tensor with b'th datapoint of the batch 
                 gmaker.forward(center,batch[b].coord_sets[0],input_tensor[b])
+            # Take only the first 14 channels as that is for proteins, other 14 are ligands and will remain 0.
             output = model(input_tensor[:,:14])
             #labels_oh = nn.functional.one_hot(labels)
             #labels_oh = labels_oh
             all_labels.append(labels.cpu())
             all_probs.append(F.softmax(output).detach().cpu())
-        # mean loss for testing session
         all_labels=torch.flatten(torch.stack(all_labels)).cpu().numpy()
+        #all predicted probabilities
         all_probs=torch.flatten(torch.stack(all_probs),start_dim=0,end_dim=1).cpu().numpy()
-        # saving cuda memory for segmentation
+        # saving cuda memory
         del input_tensor
         return all_labels, all_probs[:,1]
 

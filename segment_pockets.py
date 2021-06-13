@@ -84,19 +84,24 @@ def test(model, test_loader, gmaker_img,device,dx_name, args):
     model.eval()
     dims = gmaker_img.grid_dimensions(test_loader.num_types())
     tensor_shape = (1,) + dims
+    #create tensor for input, centers and indices
     input_tensor = torch.zeros(tensor_shape, dtype=torch.float32, device=device, requires_grad=True)
     float_labels = torch.zeros((1, 4), dtype=torch.float32, device=device)
     for batch in test_loader:
         count+=1
+        # update float_labels with center and index values
         batch.extract_labels(float_labels)
         centers = float_labels[:, 1:]
         for b in range(1):
             center = molgrid.float3(float(centers[b][0]), float(centers[b][1]), float(centers[b][2]))
+            # Update input tensor with b'th datapoint of the batch 
             gmaker_img.forward(center, batch[b].coord_sets[0], input_tensor[b])
+        # Take only the first 14 channels as that is for proteins, other 14 are ligands and will remain 0.
         masks_pred = model(input_tensor[:, :14])
         masks_pred=masks_pred.detach().cpu()
         masks_pred=preprocess_output(masks_pred[0], args.threshold)
         masks_pred=masks_pred.cpu()
+        # Output predicted mask in .dx format 
         masks_pred=molgrid.Grid3f(masks_pred)
         molgrid.write_dx(dx_name+'_'+str(count)+'.dx',masks_pred,center,0.5,1.0)
         if count>=args.rank:

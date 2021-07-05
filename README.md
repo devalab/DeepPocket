@@ -10,6 +10,8 @@ If you want to use this project for development, we recommend going through [lib
 
 [Fpocket](https://github.com/Discngine/fpocket), [Pytorch](https://pytorch.org/), [libmolgrid](https://github.com/gnina/libmolgrid), [Biopython](https://biopython.org/) and other frequently used python packages
 
+To reproduce the substructure benchmark [Prody](https://prody.csb.pitt.edu/) and [Rdkit](https://www.rdkit.org/) are also required.
+
 ## Dataset Preprocessing
 
 PDB files are first parsed to remove hetero atoms, then converted to "gninatypes" files and finally collected into a "molcache2" file for quicker input and model training with libmolgrid. "gninatypes" and "molcache2" files are binary files that store an efficient representation of the input protein to be used for gridding the molecule. They are prepared for faster input with libmolgrid for quicker training of the CNN models.
@@ -76,6 +78,15 @@ Steps for preparing training data:
 Example usage of create_molcache2:
 
 	python create_molcache2.py -c 4 --recmolcache scPDB_new.molcache2 -d data/scPDB/  scPDB_train0.types scPDB_test0.types
+
+##Substructure Benchmark
+
+To reproduce our results on the substructure benchmark, run the following command:
+     
+        python subpockets_benchmark_all.py --test_types refined4414_predict.types --model_weights refined_best_test_IOU_10.pth.tar -d ./data/ --test_recmolcache refined4414.molcache2
+
+"refined4414_predict.types" file contains fpocket candidate centers closest to ligand for protein-ligand complexes in the refined dataset.
+The data directory should contain clean (no water) .pdb files and ligand sdf files.
 
 ## Citation
 

@@ -45,6 +45,8 @@ def parse_args(argv=None):
                         help="Output channels for predicted masks, default 1", default=1)
     parser.add_argument('-t', '--threshold', type=float, required=False,
                         help="threshold for segmentation", default=0.5)
+    parser.add_argument('--mask_dist', type=float, required=False,
+                        help="distance from mask to residues", default=3.5)
     args = parser.parse_args(argv)
 
     argdict = vars(args)

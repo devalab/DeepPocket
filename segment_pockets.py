@@ -16,6 +16,8 @@ from skimage.morphology import cube
 from skimage.morphology import closing
 from skimage.segmentation import clear_border
 from skimage.measure import label
+from scipy.spatial.distance import cdist
+from prody import *
 
 def preprocess_output(input, threshold):
     input[input>=threshold]=1
@@ -50,6 +52,36 @@ def get_model_gmaker_eproviders(args):
 
     return  gmaker_img, eptest
 
+def Output_Coordinates(tensor,center,dimension=16.25,resolution=0.5):
+    #get coordinates of mask from predicted mask
+    tensor=tensor.numpy()
+    indices = np.argwhere(tensor>0).astype('float32')
+    indices *= resolution
+    center=np.array([float(center[0]), float(center[1]), float(center[2])])
+    indices += center
+    indices -= dimension
+    return indices
+
+def predicted_AA(indices,prot_prody,distance):
+    #amino acids from mask distance thresholds
+    prot_coords = prot_prody.getCoords()
+    ligand_dist = cdist(indices, prot_coords)
+    binding_indices = np.where(np.any(ligand_dist <= distance, axis=0))
+    #get predicted protein residue indices involved in binding site
+    prot_resin = prot_prody.getResindices()
+    prot_binding_indices = prot_resin[binding_indices]
+    prot_binding_indices = sorted(list(set(prot_binding_indices)))
+    return prot_binding_indices
+
+def output_pocket_pdb(pocket_name,prot_prody,pred_AA):
+    #output pocket pdb
+    sel_str= 'resindex '
+    for i in pred_AA:
+        sel_str+= str(i)+' or resindex '
+    sel_str=' '.join(sel_str.split()[:-2])
+    pocket=prot_prody.select(sel_str)
+    writePDB(pocket_name,pocket)
+
 def parse_args(argv=None):
     '''Return argument namespace and commandline'''
     parser = argparse.ArgumentParser(description='Train neural net on .types data.')
@@ -67,6 +99,9 @@ def parse_args(argv=None):
                         help="Output channels for predicted masks, default 1", default=1)
     parser.add_argument('--dx_name', type=str, required=True,
                         help="dx file name")
+    parser.add_argument('-p','--protein', type=str, required=False, help="pdb file for predicting binding sites")
+    parser.add_argument('--mask_dist', type=float, required=False,
+                        help="distance from mask to residues", default=3.5)
     args = parser.parse_args(argv)
 
     argdict = vars(args)
@@ -87,6 +122,7 @@ def test(model, test_loader, gmaker_img,device,dx_name, args):
     #create tensor for input, centers and indices
     input_tensor = torch.zeros(tensor_shape, dtype=torch.float32, device=device, requires_grad=True)
     float_labels = torch.zeros((1, 4), dtype=torch.float32, device=device)
+    prot_prody=parsePDB(args.protein)
     for batch in test_loader:
         count+=1
         # update float_labels with center and index values
@@ -100,6 +136,10 @@ def test(model, test_loader, gmaker_img,device,dx_name, args):
         masks_pred = model(input_tensor[:, :14])
         masks_pred=masks_pred.detach().cpu()
         masks_pred=preprocess_output(masks_pred[0], args.threshold)
+        # predict binding site residues
+        pred_coords = Output_Coordinates(masks_pred, center)
+        pred_aa = predicted_AA(pred_coords, prot_prody, args.mask_dist)
+        output_pocket_pdb(dx_name+'_pocket'+str(count)+'.pdb',prot_prody,pred_aa)
         masks_pred=masks_pred.cpu()
         # Output predicted mask in .dx format 
         masks_pred=molgrid.Grid3f(masks_pred)

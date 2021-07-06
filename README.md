@@ -42,7 +42,7 @@ Description of each argument given in script.
 
 If the name of the input file is protein.pdb, then fpocket creates a protein_out/pockets directory. The CNN ranked pockets will be given in the bary_centers_ranked.types file in that directory. 
 
-If you asked for segmented pockets ("-r") the script will output ".dx" files that can be visualised in pymol. 
+If you asked for segmented pockets ("-r") the script will output ".dx" files that can be visualised in pymol. It will also output "pocket*.pdb" files that contain predicted binding site residues.
 
 ## Training Classifier
 
@@ -79,7 +79,7 @@ Example usage of create_molcache2:
 
 	python create_molcache2.py -c 4 --recmolcache scPDB_new.molcache2 -d data/scPDB/  scPDB_train0.types scPDB_test0.types
 
-##Substructure Benchmark
+## Substructure Benchmark
 
 To reproduce our results on the substructure benchmark, run the following command:
      

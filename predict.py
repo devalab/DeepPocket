@@ -32,9 +32,9 @@ import gc
 def parse_args(argv=None):
     '''Return argument namespace and commandline'''
     parser = argparse.ArgumentParser(description='predict ligand binding site from .pdb file')
-    parser.add_argument('-c', '--class_checkpoint', type=str, required=False,
+    parser.add_argument('-c', '--class_checkpoint', type=str, required=True,
                         help="classification checkpoint")
-    parser.add_argument('-s', '--seg_checkpoint', type=str, required=False,
+    parser.add_argument('-s', '--seg_checkpoint', type=str, required=True,
                         help="segmentation checkpoint")
     parser.add_argument('-p','--protein', type=str, required=False, help="pdb file for predicting binding sites")
     parser.add_argument('-r', '--rank', type=int, required=False,

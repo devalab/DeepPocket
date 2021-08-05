@@ -75,6 +75,9 @@ def predicted_AA(indices,prot_prody,distance):
 
 def output_pocket_pdb(pocket_name,prot_prody,pred_AA):
     #output pocket pdb
+    #skip if no amino acids predicted
+    if len(pred_AA)==0:
+        return
     sel_str= 'resindex '
     for i in pred_AA:
         sel_str+= str(i)+' or resindex '

@@ -42,7 +42,7 @@ Description of each argument given in script.
 
 If the name of the input file is protein.pdb, then fpocket creates a protein_out/pockets directory. The CNN ranked pockets will be given in the bary_centers_ranked.types file in that directory. 
 
-If you asked for segmented pockets ("-r") the script will output ".dx" files that can be visualised in pymol. It will also output "pocket*.pdb" files that contain predicted binding site residues.
+If you asked for segmented pockets ("-r") the script will output ".dx" files that can be visualised in pymol. It will also output "pocket*.pdb" files that contain predicted binding site residues. If no binding site residues are predicted that particular pocket*.pdb will not be created.
 
 ## Training Classifier
 

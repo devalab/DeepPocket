@@ -83,7 +83,7 @@ Example usage of create_molcache2:
 
 To reproduce our results on the substructure benchmark, run the following command:
      
-        python subpockets_benchmark_all.py --test_types refined4414_predict.types --model_weights refined_best_test_IOU_10.pth.tar -d ./data/ --test_recmolcache refined4414.molcache2
+        python subpockets_benchmark_all.py --test_types refined4414_predict.types --model_weights refined_best_test_IOU_88.pth.tar -d ./data/ --test_recmolcache refined4414.molcache2
 
 "refined4414_predict.types" file contains fpocket candidate centers closest to ligand for protein-ligand complexes in the refined dataset.
 The data directory should contain clean (no water) .pdb files and ligand sdf files.

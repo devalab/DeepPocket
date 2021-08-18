@@ -2,7 +2,7 @@
 
 DeepPocket is a 3D convolutional Neural Network framework for ligand binding site detection and segmentation from protein structures. This is the official open source repository for the following paper:
 
-Aggarwal, Rishal; Gupta, Akash; Chelur, Vineeth; Jawahar, C. V.; Priyakumar, U. Deva (2021): DeepPocket: Ligand Binding Site Detection and Segmentation using 3D Convolutional Neural Networks. ChemRxiv. Preprint. [Link](https://doi.org/10.26434/chemrxiv.14611146.v1) 
+Aggarwal, Rishal; Gupta, Akash; Chelur, Vineeth; Jawahar, C. V.; Priyakumar, U. Deva (2021): DeepPocket: Ligand Binding Site Detection and Segmentation using 3D Convolutional Neural Networks. ACS JCIM. 2021 [Link](https://pubs.acs.org/doi/10.1021/acs.jcim.1c00799) 
 
 If you want to use this project for development, we recommend going through [libmolgrid](https://github.com/gnina/libmolgrid) first. To use DeepPocket for predicting binding sites on an input protein skip to "Predicting Binding Sites" section. 
 
@@ -92,11 +92,25 @@ The data directory should contain clean (no water) .pdb files and ligand sdf fil
 
 If you find this useful please cite the paper mentioned above.
 
-	@article{Aggarwal2021,
-	author = "Rishal Aggarwal and Akash Gupta and Vineeth Chelur and C. V. Jawahar and U. Deva Priyakumar",
-	title = "{DeepPocket: Ligand Binding Site Detection and Segmentation using 3D Convolutional Neural Networks}",
-	year = "2021",
-	month = "5",
-	url = "https://chemrxiv.org/articles/preprint/DeepPocket_Ligand_Binding_Site_Detection_and_Segmentation_using_3D_Convolutional_Neural_Networks/14611146",
-	doi = "10.26434/chemrxiv.14611146.v1"
+	@article{doi:10.1021/acs.jcim.1c00799,
+    author = {Aggarwal, Rishal and Gupta, Akash and Chelur, Vineeth and Jawahar, C. V. and Priyakumar, U. Deva},
+    title = {DeepPocket: Ligand Binding Site Detection and Segmentation using 3D Convolutional Neural Networks},
+    journal = {Journal of Chemical Information and Modeling},
+    volume = {0},
+    number = {0},
+    pages = {null},
+    year = {0},
+    doi = {10.1021/acs.jcim.1c00799},
+    note ={PMID: 34374539},
+
+    URL = { 
+        https://doi.org/10.1021/acs.jcim.1c00799
+    
+    },
+    eprint = { 
+        https://doi.org/10.1021/acs.jcim.1c00799
+    
     }
+
+    }
+

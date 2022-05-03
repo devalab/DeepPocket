@@ -6,7 +6,7 @@ second argument is path to barycenters list file
 import molgrid
 import struct
 import numpy as np
-import os
+import os,pathlib
 import sys
 from model import Model
 
@@ -15,7 +15,7 @@ def gninatype(file):
     f=open(file.replace('.pdb','.types'),'w')
     f.write(file)
     f.close()
-    atom_map=molgrid.FileMappedGninaTyper('gninamap')
+    atom_map=molgrid.FileMappedGninaTyper(f'{pathlib.Path(os.path.realpath(__file__)).resolve().parent}/gninamap')
     dataloader=molgrid.ExampleProvider(atom_map,shuffle=False,default_batch_size=1)
     train_types=file.replace('.pdb','.types')
     dataloader.populate(train_types)

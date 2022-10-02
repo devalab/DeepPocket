@@ -46,9 +46,9 @@ If the name of the input file is protein.pdb, then fpocket creates a protein_out
 
 If you asked for segmented pockets ("-r") the script will output ".dx" files that can be visualised in pymol. It will also output "pocket*.pdb" files that contain predicted binding site residues. If no binding site residues are predicted that particular pocket*.pdb will not be created.
 
-## Training Classifierscp rishal@cluster.csb.pitt.edu:/net/pulsar/home/koes/rishal/p2rank/p2rank-datasets/coach420/coach420_ligands.tar
+## Training Classifier
 
-We use [wandb](https://wandscp rishal@cluster.csb.pitt.edu:/net/pulsar/home/koes/rishal/p2rank/p2rank-datasets/coach420/coach420_ligands.tarb.ai/site) to track training performance. It's free and easy to use. If you want to avoid using wandb, simply comment out all lines that contain "wandb" in the training script.
+We use [wandb](https://wandb.ai/site) to track training performance. It's free and easy to use. If you want to avoid using wandb, simply comment out all lines that contain "wandb" in the training script.
 
 Example usage of train.py:
 

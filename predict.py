@@ -96,9 +96,14 @@ if __name__ == '__main__':
     zipped_lists = zip(class_probs[:len(types_lines)], types_lines)
     sorted_zipped_lists = sorted(zipped_lists,reverse=True)
     ranked_types = [element for _, element in sorted_zipped_lists]
+    confidence_types = [element for element, _ in sorted_zipped_lists]
     seg_types= class_types.replace('.types','_ranked.types')
+    probs_types_file=class_types.replace('.types','_confidence.txt')
     fout=open(seg_types,'w')
     fout.write(''.join(ranked_types))
+    fout.close()
+    fout=open(probs_types_file,'w')
+    fout.write(''.join(confidence_types))
     fout.close()
     del class_model
     del class_checkpoint

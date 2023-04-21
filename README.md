@@ -12,6 +12,13 @@ If you want to use this project for development, we recommend going through [lib
 
 To reproduce the substructure benchmark [Prody](https://prody.csb.pitt.edu/) and [Rdkit](https://www.rdkit.org/) are also required.
 
+### Installation Guide
+#### Using with conda environment
+We can easily create a new enviroment which contains necessary dependencies following the command below:
+```
+conda env create -f environment.yml
+```
+
 ## Dataset Preprocessing
 
 PDB files are first parsed to remove hetero atoms, then converted to "gninatypes" files and finally collected into a "molcache2" file for quicker input and model training with libmolgrid. "gninatypes" and "molcache2" files are binary files that store an efficient representation of the input protein to be used for gridding the molecule. They are prepared for faster input with libmolgrid for quicker training of the CNN models.

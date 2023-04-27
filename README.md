@@ -78,9 +78,17 @@ I have written down steps below that pertain to preparing training data for a da
 Steps for preparing training data:
 
 1) remove hetero atoms (clean_pdb.py)
+- Example: `python clean_pdb.py 8BRA.pdb 8BRA_protein.pdb`
 2) run fpocket through structures (fpocket -f *_protein.pdb)
+- Example: `fpocket -f 8BRA_protein.pdb`. It outputs a folder named "8BRA_protein_out" including: 
+```
+8BRA_protein.pml  8BRA_protein_PYMOL.sh  8BRA_protein_info.txt  8BRA_protein_pockets.pqr
+8BRA_protein.tcl  8BRA_protein_VMD.sh    8BRA_protein_out.pdb   pockets
+```
 3) get candidate pocket centers for all structures (get_centers.py)
+- Example: `python get_centers.py 8BRA_protein_out/`. It outputs a file named "bary_centers.txt" in the folder.
 4) create .gninatypes files for all structure (gninatype() in types_and_gninatyper.py)
+- Example: `python types_and_gninatyper.py 8BRA_protein_out/8BRA_protein_out.pdb`. It outputs a file named "8BRA_protein_out.gninatypes".
 5) make train and test types (make_types.py)
 6) create molcache file for training (create_molcache2.py)
 

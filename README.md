@@ -19,6 +19,12 @@ We can easily create a new enviroment which contains necessary dependencies foll
 conda env create -f environment.yml
 ```
 
+or using:
+```
+chmod +x install.sh
+bash install.sh
+```
+
 ## Dataset Preprocessing
 
 PDB files are first parsed to remove hetero atoms, then converted to "gninatypes" files and finally collected into a "molcache2" file for quicker input and model training with libmolgrid. "gninatypes" and "molcache2" files are binary files that store an efficient representation of the input protein to be used for gridding the molecule. They are prepared for faster input with libmolgrid for quicker training of the CNN models.

@@ -47,7 +47,7 @@ def main():
         if (input_file.is_file() == False) or (str(input_file.name).endswith('.pdb') == False):
             continue
         print(input_file.path)
-        ligand_file = str(input_file.path).split('.')[0] + "_ligand.sdf"
+        ligand_file = str(input_file.path).replace('.pdb', "_ligand.sdf")
         if os.path.isfile(ligand_file) == False:
             print("There is no ligand file for pdb file named {} with {}. Skip run".format(input_file.name, ligand_file))
             continue

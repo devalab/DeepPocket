@@ -49,7 +49,7 @@ def main():
         print(input_file.path)
         ligand_file = input_file.path.split('.')[0] + "_ligand.sdf"
         if os.path.isfile(ligand_file) == False:
-            print("There is no ligand file for pdb file named {}. Skip run".format(input_file.name))
+            print("There is no ligand file for pdb file named {} with {}. Skip run".format(input_file.name, ligand_file))
             continue
         cleaned_pdb_file_name, cleaned_pdb_file_path = clean_pdb_step(input_file, options.output_path)
         fpocket_dir, fpocket_pdb_file_path = fpocket_step(cleaned_pdb_file_path)

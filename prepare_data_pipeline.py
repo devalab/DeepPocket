@@ -9,10 +9,12 @@ from types_and_gninatyper import gninatype
 EXTENSION_CLEAN_STEP = '_protein'
 
 def clean_pdb_step(input_file, output_path):
+    print("Starting cleaning pdb...")
     input_file_path = input_file.path
     cleaned_pdb_file_name = str(input_file.name).split('.')[0]+ EXTENSION_CLEAN_STEP +".pdb"
     cleaned_pdb_file_path = os.path.join(output_path, cleaned_pdb_file_name)
     clean_pdb(input_file_path,cleaned_pdb_file_path)
+    print("Finished cleaning pdb!")
     return cleaned_pdb_file_name, cleaned_pdb_file_path
 
 def fpocket_step(cleaned_pdb_file_path):
@@ -22,11 +24,15 @@ def fpocket_step(cleaned_pdb_file_path):
     return fpocket_dir, fpocket_pdb_file_path
 
 def get_centers_step(fpocket_dir):
+    print("Starting getting centers...")
     get_centers(fpocket_dir)
+    print("Finished getting centers!")
 
 def types_and_gninatyper_step(fpocket_pdb_file_path):
+    print("Starting typing and gninatyping...")
     gninatype(fpocket_pdb_file_path)
     gninatypes_file_path = fpocket_pdb_file_path.split('.')[0] + '.gninatypes'
+    print("Finished typing and gninatyping!")
     return gninatypes_file_path
 
 def main():
@@ -51,7 +57,9 @@ def main():
         bary_centers_file = os.path.join(fpocket_dir, 'bary_centers.txt')
         gninatypes_file_path = types_and_gninatyper_step(fpocket_pdb_file_path)
         gninatypes_file_path_list.append(gninatypes_file_path)
+        print("Starting typing from file...")
         types_from_file(ligand_file, bary_centers_file, output_types_file)
+        print("Finished typing from file!")
     output_types_file.close()
     create_cache2(gninatypes_file_path_list, '', output_recmolcache_path)
 

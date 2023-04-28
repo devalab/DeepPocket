@@ -11,7 +11,7 @@ EXTENSION_CLEAN_STEP = '_protein'
 def clean_pdb_step(input_file, output_path):
     print("Starting cleaning pdb...")
     input_file_path = input_file.path
-    cleaned_pdb_file_name = str(input_file.name).split('.')[0]+ EXTENSION_CLEAN_STEP +".pdb"
+    cleaned_pdb_file_name = str(input_file.name).replace('.pdb', EXTENSION_CLEAN_STEP +".pdb")
     cleaned_pdb_file_path = os.path.join(output_path, cleaned_pdb_file_name)
     clean_pdb(input_file_path,cleaned_pdb_file_path)
     print("Finished cleaning pdb!")
@@ -19,7 +19,7 @@ def clean_pdb_step(input_file, output_path):
 
 def fpocket_step(cleaned_pdb_file_path):
     os.system("fpocket -f {}".format(cleaned_pdb_file_path))
-    fpocket_dir = cleaned_pdb_file_path.split('.')[0]+'_out'
+    fpocket_dir = cleaned_pdb_file_path.replace('.pdb', '_out')
     fpocket_pdb_file_path = os.path.join(fpocket_dir, cleaned_pdb_file_path.split('/')[-1].split('.')[0]+'_out.pdb')
     return fpocket_dir, fpocket_pdb_file_path
 
@@ -31,7 +31,7 @@ def get_centers_step(fpocket_dir):
 def types_and_gninatyper_step(fpocket_pdb_file_path):
     print("Starting typing and gninatyping...")
     gninatype(fpocket_pdb_file_path)
-    gninatypes_file_path = fpocket_pdb_file_path.split('.')[0] + '.gninatypes'
+    gninatypes_file_path = fpocket_pdb_file_path.replace('.pdb', '.gninatypes')
     print("Finished typing and gninatyping!")
     return gninatypes_file_path
 

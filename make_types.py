@@ -19,7 +19,7 @@ def types_from_file(f,holo_f):
         c=mol.GetConformer()
         atom_np=c.GetPositions()
         atom_nps.append(atom_np)
-        centers = np.loadtxt(path + "/" + prot +"/"+prot+ "_protein_nowat_out/pockets/" + "bary" + "_centers.txt")
+        centers = np.loadtxt(path + "/" + prot +"/"+prot+ "_protein_nowat_out/pockets/bary_centers.txt")
         if centers.shape[0]==4 and len(centers.shape)==1:
             centers=np.expand_dims(centers,axis=0)
         limit = centers.shape[0]

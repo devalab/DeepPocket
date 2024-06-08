@@ -97,24 +97,27 @@ def create_cache2(molfiles, data_root, outfile):
     out.seek(0, os.SEEK_END)
     out.close()
 
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--col', required=True, type=int, help='Column receptor starts on')
+    parser.add_argument('--recmolcache', default='rec.molcache2', type=str, help='Filename of receptor cache')
+    parser.add_argument('-d', '--data_root', type=str, required=False,
+                        help="Root folder for relative paths in train/test files", default='')
+    parser.add_argument('fnames', nargs='+', type=str, help='types files to process')
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--col', required=True, type=int, help='Column receptor starts on')
-parser.add_argument('--recmolcache', default='rec.molcache2', type=str, help='Filename of receptor cache')
-parser.add_argument('-d', '--data_root', type=str, required=False,
-                    help="Root folder for relative paths in train/test files", default='')
-parser.add_argument('fnames', nargs='+', type=str, help='types files to process')
+    args = parser.parse_args()
 
-args = parser.parse_args()
+    # load all file names (.gninatypes) for each pdb file into memory
+    seenrec = set()
+    for fname in args.fnames:
+        for line in open(fname):
+            vals = line.split()
+            rec = vals[args.col] #get .gninatypes path in the 5th column of the .types file
 
-# load all file names into memory
-seenrec = set()
-for fname in args.fnames:
-    for line in open(fname):
-        vals = line.split()
-        rec = vals[args.col]
+            if rec not in seenrec:
+                seenrec.add(rec)
+                
+    create_cache2(sorted(list(seenrec)), args.data_root, args.recmolcache)
 
-        if rec not in seenrec:
-            seenrec.add(rec)
-
-create_cache2(sorted(list(seenrec)), args.data_root, args.recmolcache)
+if __name__ == "__main__":
+    main()

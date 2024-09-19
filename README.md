@@ -90,6 +90,12 @@ To reproduce our results on the substructure benchmark, run the following comman
 "refined4414_predict.types" file contains fpocket candidate centers closest to ligand for protein-ligand complexes in the refined dataset.
 The data directory should contain clean (no water) .pdb files and ligand sdf files.
 
+## Dockerized Version
+
+A dockerized version of DeepPocket is available in the `docker` directory. The docker image contains all the necessary dependencies to run DeepPocket.
+
+The detailed instructions to run the docker image are provided in the README of the `docker` directory.
+
 ## Citation
 
 If you find this useful please cite the paper mentioned above.

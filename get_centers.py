@@ -1,5 +1,6 @@
 '''
 Takes the *_out/pockets directory from fpocket as input and outputs a file containining candidate pocket centers in that directory
+Example: python get_centers.py 8BRA_protein_out/
 '''
 import os
 import numpy as np
